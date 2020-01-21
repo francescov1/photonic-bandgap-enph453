@@ -67,8 +67,8 @@ P_2 = get_phase_mat(f_rf, l_2, v_2)
 
 M_cell = get_matrix_model(T_12, T_21, P_1, P_2)
 
-#print("\n")
-#print(M_cell)
+print("\n")
+print(M_cell)
 R = get_frequency_response(M_cell)
 
 print("frequency response: " + str(R))
