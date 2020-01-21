@@ -58,6 +58,8 @@ def get_matrix_model(T_ab, T_ba, P_a, P_b):
     M_cell = np.matmul(M_cell, T_ab)
     M_cell = np.matmul(M_cell, P_a)
 
+    # for multiple cells
+    #M_cell = np.linalg.matrix_power(M_cell, num_cells)
     return M_cell;
 
 T_12 = get_transfer_mat(Z_1, Z_2)
@@ -67,7 +69,6 @@ P_2 = get_phase_mat(f_rf, l_2, v_2)
 
 M_cell = get_matrix_model(T_12, T_21, P_1, P_2)
 
-print("\n")
 print(M_cell)
 R = get_frequency_response(M_cell)
 
