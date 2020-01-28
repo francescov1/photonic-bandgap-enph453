@@ -38,10 +38,9 @@ class CellModel:
         self.P_2 = calc_phase_mat(f_rf, self.l_2, self.v)
 
     def set_matrix_model(self):
-        # equation in lab description
-        #M_cell = self.T_21 @ self.P_2 @ self.T_12 @ self.P_1
+        M_cell = self.T_21 @ self.P_2 @ self.T_12 @ self.P_1
 
-        # Waleeds order of operations
-        M_cell = self.P_2 @ self.T_12 @ self.P_1 @ self.T_21
+        # Waleeds order of operations - seems to give the same thing
+        #M_cell = self.P_2 @ self.T_12 @ self.P_1 @ self.T_21
 
         self.M_cell = M_cell
