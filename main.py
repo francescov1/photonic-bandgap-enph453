@@ -24,7 +24,7 @@ cell_lengths = cell_lengths[:2]
 
 start_f = 50e6 # MHz
 stop_f = 850e6 # MHz
-num_points = 200
+num_points = 100
 frequencies = np.linspace(start=start_f, stop=stop_f, num=num_points)
 
 transmission = []

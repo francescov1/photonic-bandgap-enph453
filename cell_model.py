@@ -7,7 +7,7 @@ class CellModel:
         self.l_2 = l_50
         self.Z_1 = 75
         self.Z_2 = 50
-        self.v = 0.66 * 3.0 * (10**8) # 2/3 * speed of light
+        self.v = 0.66 * 3.0e8 # 2/3 * speed of light
 
     def get_band_gap_frequency(self):
         return self.v / (2 * (self.l_1 + self.l_2))
@@ -40,20 +40,10 @@ class CellModel:
         self.P_2 = calc_phase_mat(f_rf, self.l_2, self.v)
 
     def set_matrix_model(self):
-        # model unit cell of coaxial cable by multiply transfer and propagation matrices
-        # M_cell = T_21 * P_2 * T_12 * P_1
-
         # equation in lab description
-        '''
-        M_cell = np.matmul(self.T_21, self.P_2)
-        M_cell = np.matmul(M_cell, self.T_12)
-        M_cell = np.matmul(M_cell, self.P_1)
-        '''
+        #M_cell = self.T_21 @ self.P_2 @ self.T_12 @ self.P_1
 
         # Waleeds order of operations
-        #P_2*T_12*P_1*T_21
-        M_cell = np.matmul(self.P_2, self.T_12)
-        M_cell = np.matmul(M_cell, self.P_1)
-        M_cell = np.matmul(M_cell, self.T_21)
+        M_cell = self.P_2 @ self.T_12 @ self.P_1 @ self.T_21
 
         self.M_cell = M_cell
