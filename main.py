@@ -24,7 +24,7 @@ cell_lengths = cell_lengths[:2]
 
 start_f = 50e6 # MHz
 stop_f = 850e6 # MHz
-num_points = 100
+num_points = 1000
 frequencies = np.linspace(start=start_f, stop=stop_f, num=num_points)
 
 transmission = []
@@ -52,10 +52,11 @@ for f_rf in frequencies:
     cell.set_matrix_model()
 
     # 2 cells
-    M_total = np.linalg.matrix_power(cell.M_cell, 2)
+    M_total = np.linalg.matrix_power(cell.M_cell, 6)
 
     T = get_frequency_response(M_total)
     transmission.append(T)
+
 
 plt.plot(frequencies, transmission)
 plt.xlabel("Frequency (Hz)")

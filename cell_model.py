@@ -27,13 +27,11 @@ class CellModel:
 
     def set_phase_mats(self, f_rf):
 
-        eps = np.finfo(float).eps # epsilon
-
         def calc_phase_mat(f, l, v):
             phi = (2 * np.pi * f * l) / v
 
             # P_i = [[e^(i*phi), 0], [0, e^(i*phi)]] - i in equation is complex i, not i in P_i
-            P = np.array([[eps**complex(0, phi), 0], [0, eps**complex(0, -phi)]])
+            P = np.array([[np.exp(complex(0, phi)), 0], [0, np.exp(complex(0, -phi))]])
             return P
 
         self.P_1 = calc_phase_mat(f_rf, self.l_1, self.v)
