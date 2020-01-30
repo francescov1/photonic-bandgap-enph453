@@ -1,38 +1,48 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-# folder_list = ['50-100mhz','100-200mhz','200-380mhz','400-850mhz']
-folder_list = ['400-850mhz']
+folder_list = ['50-100mhz','100-200mhz','200-380mhz','400-850mhz']
+# folder_list = ['100-200mhz']
 data_of_interest = '/6cells.txt'
-plot_x=[]
-plot_y=[]
+combined_x=[]
+combined_y=[]
+
 for name in folder_list:
     folder = './Data/'+name
+
+    #load calibration data
     calibration = np.loadtxt(folder+'/calibration.txt')
+
+
+    #load frequency calibration data
     f_calibration = np.loadtxt(folder+'/f-calibration.txt')
+
+    #load amplitude data
     data = np.loadtxt(folder+data_of_interest)
+    data_calibrated = data[:,1]/calibration[:,1]
 
-    #find best fit line of voltage calibration curve
-    # poly_calib = np.polyfit(calibration[:,0],calibration[:,1],1)
-    # poly_f = np.polyfit(calibration[:,0],f_calibration,1)
-    # start_idx = np.where(data[:,0]==calibration[0,0])[0]
-    # idx = start_idx[0]
-    # new_baseline = poly_calib[0]*data[idx:,0]+poly_calib[1]
-    # freq_data = poly_f[0]*data[idx:,0]+poly_f[1]
-    # data_corrected = data[idx:,1]/new_baseline
-    # plot_x = np.concatenate([plot_x,freq_data])
-    # plot_y = np.concatenate([plot_y,data_corrected])
+    #find fit line for frequency data
+    poly_f = np.polyfit(f_calibration[:,0],f_calibration[:,2],1)
+    freq_data = poly_f[0]*data[:,0]+poly_f[1] #converts voltage to frequency
+    count=0
 
-plt.plot(f_calibration[:,0],f_calibration[:,2],'.')
-plt.show()
+    #get rid of overlapping data
+    if(len(combined_x)>0):
+        while(combined_x[-1]>freq_data[0]):
+            freq_data = np.delete(freq_data,0)
+            data_calibrated = np.delete(data_calibrated,0)
+
+    #combine data sets
+    combined_x = np.concatenate([combined_x,freq_data])
+    combined_y = np.concatenate([combined_y,data_calibrated])
 
 def normalize(arr):
     #normalize 1-d array
     arr = (arr-np.min(arr))/(np.max(arr)-np.min(arr))
     return arr
 
-# plot_y = normalize(plot_y)
-# plt.plot(plot_x,plot_y)
-# plt.xlabel('Frequency [MHz]')
-# plt.ylabel('Amplitude')
-# plt.show()
+# combined_y = normalize(combined_y)
+plt.plot(combined_x,combined_y)
+plt.xlabel('Frequency [MHz]')
+plt.ylabel('Amplitude')
+plt.show()
