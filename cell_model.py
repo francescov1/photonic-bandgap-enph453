@@ -7,7 +7,7 @@ class CellModel:
         self.l_2 = l_50
         self.Z_1 = 75
         self.Z_2 = 50
-        self.v = 0.66 * 3.0 * (10**8) # 2/3 * speed of light
+        self.v = 0.66 * 3.0e8 # 2/3 * speed of light
 
     def get_band_gap_frequency(self):
         return self.v / (2 * (self.l_1 + self.l_2))
@@ -27,33 +27,20 @@ class CellModel:
 
     def set_phase_mats(self, f_rf):
 
-        eps = np.finfo(float).eps # epsilon
-
         def calc_phase_mat(f, l, v):
             phi = (2 * np.pi * f * l) / v
 
             # P_i = [[e^(i*phi), 0], [0, e^(i*phi)]] - i in equation is complex i, not i in P_i
-            P = np.array([[eps**complex(0, phi), 0], [0, eps**complex(0, -phi)]])
+            P = np.array([[np.exp(complex(0, phi)), 0], [0, np.exp(complex(0, -phi))]])
             return P
 
         self.P_1 = calc_phase_mat(f_rf, self.l_1, self.v)
         self.P_2 = calc_phase_mat(f_rf, self.l_2, self.v)
 
     def set_matrix_model(self):
-        # model unit cell of coaxial cable by multiply transfer and propagation matrices
-        # M_cell = T_21 * P_2 * T_12 * P_1
+        M_cell = self.T_21 @ self.P_2 @ self.T_12 @ self.P_1
 
-        # equation in lab description
-        '''
-        M_cell = np.matmul(self.T_21, self.P_2)
-        M_cell = np.matmul(M_cell, self.T_12)
-        M_cell = np.matmul(M_cell, self.P_1)
-        '''
-
-        # Waleeds order of operations
-        #P_2*T_12*P_1*T_21
-        M_cell = np.matmul(self.P_2, self.T_12)
-        M_cell = np.matmul(M_cell, self.P_1)
-        M_cell = np.matmul(M_cell, self.T_21)
+        # Waleeds order of operations - seems to give the same thing
+        #M_cell = self.P_2 @ self.T_12 @ self.P_1 @ self.T_21
 
         self.M_cell = M_cell
