@@ -1,41 +1,24 @@
 import numpy as np
-import matplotlib.pyplot as plt
-from lengths import cells as cell_lengths, impurities as impurity_lengths
-from cell_model import CellModel
+from apparatus_model import ApparatusModel
 
-# get frequency response
-def get_frequency_response(M_cell):
-    R = (abs(M_cell[1, 0])**2) / (abs(M_cell[0, 0])**2)
-    T = 1/abs(M_cell[0, 0])**2
-    return R, T
+# TODO: handle impurity at first position
+# TODO: fix impurity speed
 
-l_50 = cell_lengths['l_50']
-l_75 = cell_lengths['l_75']
-l_tip = cell_lengths['l_tip']
 n_cells = 2
+# 2, 4, 6 pure
+# 6 - impurity at each spot - 93 ohm impurity of length 67.5cm
+# 3 cells, impurity, 3 cells - impurity was 2 and 4 50 ohm cables of length 176 cm
 
 start_f = 50e6 # MHz
 stop_f = 850e6 # MHz
-num_points = 1000
-frequencies = np.linspace(start=start_f, stop=stop_f, num=num_points)
+n_points = 1000
 
-transmission = []
-for f_rf in frequencies:
-    # This is for different length cells
+apparatus = ApparatusModel(n_cells, start_f, stop_f, n_points)
 
-    # just take first cell length
-    cell = CellModel(l_75+l_tip, l_50+l_tip)
-    cell.set_transfer_mats()
-    cell.set_phase_mats(f_rf)
-    cell.set_matrix_model()
+# to add impurity, uncomment the lines below and sepcify params
+impurity_type = "bragg" # can be "bragg" or "fp"
+impurity_position = 1
+apparatus.add_impurity(impurity_position, impurity_type)
 
-    # 2 cells
-    M_total = np.linalg.matrix_power(cell.M_cell, n_cells)
-
-    R, T = get_frequency_response(M_total)
-    transmission.append(T)
-
-plt.plot(frequencies, transmission)
-plt.xlabel("Frequency (Hz)")
-plt.ylabel("Transmission")
-plt.show()
+apparatus.calculate_response()
+apparatus.plot_response()
