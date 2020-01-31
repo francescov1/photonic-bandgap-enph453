@@ -16,9 +16,9 @@ n_points = 1000
 apparatus = ApparatusModel(n_cells, start_f, stop_f, n_points)
 
 # to add impurity, uncomment the lines below and sepcify params
-impurity_type = "bragg" # can be "bragg" or "fp"
-impurity_position = 1
-apparatus.add_impurity(impurity_position, impurity_type)
+#impurity_type = "bragg" # can be "bragg" or "fp"
+#impurity_position = 1
+#apparatus.add_impurity(impurity_position, impurity_type)
 
 apparatus.calculate_response()
 apparatus.plot_response()
