@@ -6,7 +6,6 @@ combined_x=[]
 combined_y=[]
 labels = []
 
-plt.figure(1,figsize=(10,6))
 
 for n in range(1,8):
     folder = './Data/200-380mhz'
@@ -26,9 +25,10 @@ for n in range(1,8):
     freq_data = poly_f[0]*data[:,0]+poly_f[1] #converts voltage to frequency
     count=0
 
+    plt.figure(n)
     plt.plot(freq_data,data_calibrated)
-    plt.legend()
-    labels.append('Position {}'.format(n))
+    # plt.legend()
+    # labels.append('Position {}'.format(n))
 
 def normalize(arr):
     #normalize 1-d array

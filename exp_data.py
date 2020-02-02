@@ -41,8 +41,8 @@ def normalize(arr):
     arr = (arr-np.min(arr))/(np.max(arr)-np.min(arr))
     return arr
 
-# combined_y = normalize(combined_y)
+combined_y = normalize(combined_y)
 plt.plot(combined_x,combined_y)
 plt.xlabel('Frequency [MHz]')
-plt.ylabel('Amplitude')
+plt.ylabel('Transmittance')
 plt.show()
