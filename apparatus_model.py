@@ -20,7 +20,11 @@ class ApparatusModel:
         self.n_cells = n_cells
 
     def add_impurity(self, cell_position, type):
-        self.impurity_position = cell_position
+        if type == "fp":
+            self.impurity_position = (self.n_cells/2)-1
+        else:
+            self.impurity_position = cell_position
+
         self.impurity_type = type
 
     def calculate_response(self):

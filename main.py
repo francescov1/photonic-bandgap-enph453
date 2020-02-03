@@ -1,7 +1,7 @@
 import numpy as np
 from apparatus_model import ApparatusModel
 
-n_cells = 2
+n_cells = 6
 # 2, 4, 6 pure
 # 6 - impurity at each spot - 93 ohm impurity of length 67.5cm
 # 3 cells, impurity, 3 cells - impurity was 2 and 4 50 ohm cables of length 176 cm
@@ -12,9 +12,14 @@ n_points = 1000
 
 apparatus = ApparatusModel(n_cells, start_f, stop_f, n_points)
 
-# to add impurity, uncomment the lines below and sepcify params
-#impurity_type = "bragg" # can be "bragg" or "fp"
+# - to add impurity, uncomment the lines below and sepcify params
+# - impurity is always added to the end of the cell at specified position,
+#   expect for @ position -1, where its added at the very front
+# - can be "fp" (50ohm impurity - position gets set to middle of cells automatically) or
+#   "impure" (93ohm impurity, set @ position -1,0,1,2,3,4,5)
+
 #impurity_position = 2
+#impurity_type = "fp"
 #apparatus.add_impurity(impurity_position, impurity_type)
 
 apparatus.calculate_response()
