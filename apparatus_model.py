@@ -39,11 +39,16 @@ class ApparatusModel:
             # apparatus has an impurity
             else:
                 for i in range(self.n_cells):
-                    if i == self.impurity_position:
+                    # if impurity needs to go before all cells
+                    if i == 0 and self.impurity_position == -1:
                         M_cell = cell.get_matrix_model(
                             impurity=self.impurity_type,
-                            isFirstPosition=self.impurity_position == 0
+                            isFirstPosition=True
                         )
+                    # if impurity is at this position
+                    elif i == self.impurity_position:
+                        M_cell = cell.get_matrix_model(impurity=self.impurity_type)
+                    # if no impurity at this position
                     else:
                         M_cell = cell.get_matrix_model()
 

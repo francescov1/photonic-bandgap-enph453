@@ -14,7 +14,7 @@ apparatus = ApparatusModel(n_cells, start_f, stop_f, n_points)
 
 # to add impurity, uncomment the lines below and sepcify params
 #impurity_type = "bragg" # can be "bragg" or "fp"
-#impurity_position = 0
+#impurity_position = 2
 #apparatus.add_impurity(impurity_position, impurity_type)
 
 apparatus.calculate_response()
