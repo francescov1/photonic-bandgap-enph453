@@ -2,7 +2,6 @@ import numpy as np
 from apparatus_model import ApparatusModel
 
 # TODO: handle impurity at first position
-# TODO: fix impurity speed
 
 n_cells = 2
 # 2, 4, 6 pure

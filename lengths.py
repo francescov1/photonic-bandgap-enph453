@@ -8,7 +8,7 @@ impurities = {
     'bragg': {
         'length': 0.675,
         'impedance': 93,
-        'phase_vel': 0.85 * 3.0e8 # TODO
+        'phase_vel': 0.83 * 3.0e8
     },
     'fp': {
         'length': 1.76,
