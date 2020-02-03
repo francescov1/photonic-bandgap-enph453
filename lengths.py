@@ -5,12 +5,12 @@ cells = {
 }
 
 impurities = {
-    'bragg': {
+    'fp': {
         'length': 0.675,
         'impedance': 93,
         'phase_vel': 0.85 * 3.0e8
     },
-    'fp': {
+    'impure': {
         'length': 1.76,
         'impedance': 50,
         'phase_vel': 0.66 * 3.0e8 # 2/3 * speed of light
