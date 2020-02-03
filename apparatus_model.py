@@ -7,7 +7,6 @@ l_50 = cell_lengths['l_50']
 l_75 = cell_lengths['l_75']
 l_tip = cell_lengths['l_tip']
 
-# TODO: add as class method
 # get frequency response
 def get_frequency_response(M_cell):
     R = (abs(M_cell[1, 0])**2) / (abs(M_cell[0, 0])**2)
@@ -20,7 +19,6 @@ class ApparatusModel:
         self.frequencies = np.linspace(start=start_f, stop=stop_f, num=n_points)
         self.n_cells = n_cells
 
-    # TODO: save length and impedance based on type
     def add_impurity(self, cell_position, type):
         self.impurity_position = cell_position
         self.impurity_type = type
@@ -42,7 +40,10 @@ class ApparatusModel:
             else:
                 for i in range(self.n_cells):
                     if i == self.impurity_position:
-                        M_cell = cell.get_matrix_model(impurity=self.impurity_type)
+                        M_cell = cell.get_matrix_model(
+                            impurity=self.impurity_type,
+                            isFirstPosition=self.impurity_position == 0
+                        )
                     else:
                         M_cell = cell.get_matrix_model()
 

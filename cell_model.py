@@ -38,7 +38,7 @@ class CellModel:
         self.P_2 = calc_phase_mat(self.f_rf, self.l_2, self.v)
 
     # model impurities at the end of cell - but need to handle impurity is first position
-    def get_matrix_model(self, impurity = None):
+    def get_matrix_model(self, impurity = None, isFirstPosition = None):
         # Waleeds order of operations - seems to give the same thing
         #M_cell = self.P_2 @ self.T_12 @ self.P_1 @ self.T_21
 
@@ -46,14 +46,27 @@ class CellModel:
 
         if impurity is not None:
             impurity_info = impurities[impurity]
-            Z_3 = impurity_info['impedance']
-            l_3 = impurity_info['length']
-            v_3 = impurity_info['phase_vel']
 
-            T_23 = calc_transfer_mat(self.Z_2, Z_3)
-            T_32 = calc_transfer_mat(Z_3, self.Z_2)
-            P_3 = calc_phase_mat(self.f_rf, l_3, v_3)
+            # these calcs add the impurity on the end of the unit cell
+            if not isFirstPosition:
+                Z_3 = impurity_info['impedance']
+                l_3 = impurity_info['length']
+                v_3 = impurity_info['phase_vel']
 
-            M_cell = T_32 @ P_3 @ T_23 @ M_cell
+                T_23 = calc_transfer_mat(self.Z_2, Z_3)
+                T_32 = calc_transfer_mat(Z_3, self.Z_2)
+                P_3 = calc_phase_mat(self.f_rf, l_3, v_3)
+                M_cell = T_32 @ P_3 @ T_23 @ M_cell
+            # if the impurity is at the first position of the apparatus,
+            # it needs to be added to the beginning of the cell instead
+            else:
+                Z_0 = impurity_info['impedance']
+                l_0 = impurity_info['length']
+                v_0 = impurity_info['phase_vel']
+
+                T_01 = calc_transfer_mat(Z_0, self.Z_1)
+                T_10 = calc_transfer_mat(self.Z_1, Z_0)
+                P_0 = calc_phase_mat(self.f_rf, l_0, v_0)
+                M_cell = M_cell @ T_01 @ P_0 @ T_10
 
         return M_cell
