@@ -28,6 +28,10 @@ class ApparatusModel:
         reflection = []
         for f_rf in self.frequencies:
             cell = CellModel(l_75+l_tip, l_50+l_tip, f_rf)
+
+            if not hasattr(self, 'bang_gap_frequency'):
+                self.band_gap_frequency = cell.get_band_gap_frequency()
+
             cell.set_transfer_mats()
             cell.set_phase_mats()
 
@@ -64,8 +68,15 @@ class ApparatusModel:
         self.transmission = transmission
         self.reflection = reflection
 
-    def plot_response(self):
+    def plot_response(self, show_band_gaps=False):
         plt.plot(self.frequencies, self.transmission)
         plt.xlabel("Frequency (Hz)")
         plt.ylabel("Transmission")
+
+        if show_band_gaps:
+            current_band_gap = self.band_gap_frequency
+            while current_band_gap <= self.frequencies[-1]:
+                plt.axvline(x=current_band_gap, color="red")
+                current_band_gap += (self.band_gap_frequency*2)
+
         plt.show()

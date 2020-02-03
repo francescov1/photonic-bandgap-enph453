@@ -18,4 +18,6 @@ apparatus = ApparatusModel(n_cells, start_f, stop_f, n_points)
 #apparatus.add_impurity(impurity_position, impurity_type)
 
 apparatus.calculate_response()
-apparatus.plot_response()
+
+# pass show_band_gaps=True to have band gaps marked on plot
+apparatus.plot_response(show_band_gaps=True)
