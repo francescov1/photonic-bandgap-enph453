@@ -15,12 +15,26 @@ apparatus = ApparatusModel(n_cells, start_f, stop_f, n_points)
 # - to add impurity, uncomment the lines below and sepcify params
 # - impurity is always added to the end of the cell at specified position,
 #   expect for @ position -1, where its added at the very front
-# - can be "fp" (50ohm impurity - position gets set to middle of cells automatically) or
-#   "impure" (93ohm impurity, set @ position -1,0,1,2,3,4,5)
+# - can be one of two types:
+#     - "fp":
+#         - impedance: 50ohm
+#         - position: set to middle of cells automatically
+#         - number of cables: specify one of following: 2,4
+#     - "impure" (93ohm impurity, set @ position )
+#         - impedance: 93ohm
+#         - position: specify one of following: -1,0,1,2,3,4,5
+#         - number of cables: set to 1 automatically
 
-#impurity_position = 2
-#impurity_type = "fp"
-#apparatus.add_impurity(impurity_position, impurity_type)
+'''
+impurity_type = "fp"
+impurity_position = 2
+impurity_cable_length = 2
+apparatus.add_impurity(
+    type=impurity_type,
+    cell_position=impurity_position,
+    n_cables=impurity_cable_length
+)
+'''
 
 apparatus.calculate_response()
 
