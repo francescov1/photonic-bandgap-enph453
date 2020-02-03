@@ -1,7 +1,16 @@
 import numpy as np
 from apparatus_model import ApparatusModel
+import fabry_perot as fb
+import impurity as imp
+import exp_data as ed
 
-n_cells = 6
+n_cells = 6 # number of normal unit cells
+ed.plot_exp_data(n_cells)
+# n_fb_cells = 2 # can be 2 or 4
+# fb.plot_fb(n_fb_cells)
+# imp_pos = -1 # can be between -1 and 6
+# imp.plot_imp(imp_pos)
+
 # 2, 4, 6 pure
 # 6 - impurity at each spot - 93 ohm impurity of length 67.5cm
 # 3 cells, impurity, 3 cells - impurity was 2 and 4 50 ohm cables of length 176 cm

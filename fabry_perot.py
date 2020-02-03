@@ -1,16 +1,23 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-folder_list = ['200-380mhz']
-num_impurities = [2,4]
+# folder_list = ['200-380mhz']
+# num_impurities = [2,4]
+
+
+
+folder = './Data/200-380mhz'
 combined_x=[]
 combined_y=[]
 labels = []
 
-plt.figure(1)
+def normalize(arr):
+    #normalize 1-d array
+    arr = (arr-np.min(arr))/(np.max(arr)-np.min(arr))
+    return arr
 
-for n in num_impurities:
-    folder = './Data/200-380mhz'
+def plot_fb(n):
+    assert(n==2 or n==4), "Valid values for n are 2 and 4"
 
     #load calibration data
     calibration = np.loadtxt(folder+'/calibration.txt')
@@ -25,19 +32,15 @@ for n in num_impurities:
     #find fit line for frequency data
     poly_f = np.polyfit(f_calibration[:,0],f_calibration[:,2],1)
     freq_data = poly_f[0]*data[:,0]+poly_f[1] #converts voltage to frequency
-    count=0
+    freq_data *= 1000000
 
-    plt.plot(freq_data,data_calibrated)
-    plt.legend()
-    labels.append('Number of Impurities {}'.format(n))
+    plt.plot(freq_data,1-normalize(data_calibrated))
+    # plt.legend()
+    # labels.append('Number of Impurities {}'.format(n))
 
-def normalize(arr):
-    #normalize 1-d array
-    arr = (arr-np.min(arr))/(np.max(arr)-np.min(arr))
-    return arr
 
 # combined_y = normalize(combined_y)
-plt.legend(labels,bbox_to_anchor=(1.04,1), loc="upper left")
-plt.xlabel('Frequency [MHz]')
-plt.ylabel('Amplitude')
-plt.show()
+# plt.legend(labels,bbox_to_anchor=(1.04,1), loc="upper left")
+# plt.xlabel('Frequency [MHz]')
+# plt.ylabel('Amplitude')
+# plt.show()

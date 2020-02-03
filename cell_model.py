@@ -21,6 +21,8 @@ class CellModel:
     def __init__(self, l_75, l_50, f_rf):
         self.l_1 = l_75
         self.l_2 = l_50
+        self.l_conn = 0.05
+        self.Z_conn = 50
         self.Z_1 = 75
         self.Z_2 = 50
         self.f_rf = f_rf
@@ -30,11 +32,14 @@ class CellModel:
         return self.v / (2 * (self.l_1 + self.l_2))
 
     def set_transfer_mats(self):
-        self.T_12 = calc_transfer_mat(self.Z_1, self.Z_2)
-        self.T_21 = calc_transfer_mat(self.Z_2, self.Z_1)
+        self.T_12 = calc_transfer_mat(self.Z_1, self.Z_conn)
+        self.T_conn12 = calc_transfer_mat(self.Z_conn,self.Z_2)
+        self.T_21 = calc_transfer_mat(self.Z_2, self.Z_conn)
+        self.T_conn21 = calc_transfer_mat(self.Z_conn,self.Z_1)
 
     def set_phase_mats(self):
         self.P_1 = calc_phase_mat(self.f_rf, self.l_1, self.v)
+        self.P_conn = calc_phase_mat(self.f_rf, self.l_conn, self.v)
         self.P_2 = calc_phase_mat(self.f_rf, self.l_2, self.v)
 
     # model impurities at the end of cell - but need to handle impurity is first position
@@ -42,7 +47,7 @@ class CellModel:
         # Waleeds order of operations - seems to give the same thing
         #M_cell = self.P_2 @ self.T_12 @ self.P_1 @ self.T_21
 
-        M_cell = self.T_21 @ self.P_2 @ self.T_12 @ self.P_1
+        M_cell = self.T_conn21 @ self.P_conn @ self.T_21 @ self.P_2 @ self.T_conn12 @ self.P_conn @ self.T_12 @ self.P_1
 
         if impurity is not None:
             impurity_info = impurities[impurity]
