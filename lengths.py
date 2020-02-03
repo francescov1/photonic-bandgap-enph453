@@ -1,7 +1,8 @@
 cells = {
     'l_50': 0.83,
     'l_75': 0.68,
-    'l_tip': 0.04
+    'l_tip': 0.04,
+    'l_conn': 0.05
 }
 
 impurities = {
