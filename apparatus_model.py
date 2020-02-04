@@ -1,5 +1,5 @@
 import numpy as np
-from lengths import cells as cell_lengths
+from lengths import impurities, cells as cell_lengths
 import matplotlib.pyplot as plt
 from cell_model import CellModel
 
@@ -19,13 +19,22 @@ class ApparatusModel:
         self.frequencies = np.linspace(start=start_f, stop=stop_f, num=n_points)
         self.n_cells = n_cells
 
-    def add_impurity(self, cell_position, type):
-        if type == "fp":
-            self.impurity_position = (self.n_cells/2)-1
-        else:
-            self.impurity_position = cell_position
+    def add_impurity(self, type, cell_position, n_cables = 1):
+        impurity = impurities[type]
 
-        self.impurity_type = type
+        if type == "fp":
+            if n_cables != 2 and n_cables != 4:
+                raise Exception("FP must have n_cables=2 or n_cables=4")
+
+            impurity['position'] = (self.n_cells/2)-1
+
+            # if type=fp, n_cables should be 2 or 4
+            # if type=impure, n_cables always assumed to be 1 so length stays the same
+            impurity['length'] = impurity['length']*n_cables
+        else:
+            impurity['position'] = cell_position
+
+        self.impurity = impurity
 
     def calculate_response(self):
         transmission = []
@@ -41,21 +50,21 @@ class ApparatusModel:
 
             M_total = None
             # pure apparatus - no impurities
-            if not hasattr(self, 'impurity_position'):
+            if not hasattr(self, 'impurity'):
                 M_cell = cell.get_matrix_model()
                 M_total = np.linalg.matrix_power(M_cell, self.n_cells)
             # apparatus has an impurity
             else:
                 for i in range(self.n_cells):
                     # if impurity needs to go before all cells
-                    if i == 0 and self.impurity_position == -1:
+                    if i == 0 and self.impurity['position'] == -1:
                         M_cell = cell.get_matrix_model(
-                            impurity=self.impurity_type,
-                            isFirstPosition=True
+                            impurity=self.impurity,
+                            is_first_position=True
                         )
                     # if impurity is at this position
-                    elif i == self.impurity_position:
-                        M_cell = cell.get_matrix_model(impurity=self.impurity_type)
+                    elif i == self.impurity['position']:
+                        M_cell = cell.get_matrix_model(impurity=self.impurity)
                     # if no impurity at this position
                     else:
                         M_cell = cell.get_matrix_model()
