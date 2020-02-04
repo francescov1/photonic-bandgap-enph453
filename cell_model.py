@@ -17,10 +17,10 @@ def calc_transfer_mat(Z_a, Z_b):
 
 class CellModel:
 
-    def __init__(self, l_75, l_50, f_rf):
+    def __init__(self, l_75, l_50, f_rf, l_conn):
         self.l_1 = l_75
         self.l_2 = l_50
-        self.l_conn = 0.05
+        self.l_conn = l_conn
         self.Z_conn = 50
         self.Z_1 = 75
         self.Z_2 = 50

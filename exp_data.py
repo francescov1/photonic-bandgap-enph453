@@ -3,8 +3,6 @@ import matplotlib.pyplot as plt
 
 folder_list = ['50-100mhz','100-200mhz','200-380mhz','400-850mhz']
 # folder_list = ['100-200mhz']
-combined_x=[]
-combined_y=[]
 
 def normalize(arr):
     #normalize 1-d array
@@ -15,6 +13,8 @@ def plot_exp_data(n_cells):
     #n cells can be 2, 4 or 6
     data_of_interest = '/{}cells.txt'.format(n_cells)
 
+    combined_x=[]
+    combined_y=[]
     for name in folder_list:
         folder = './Data/'+name
 

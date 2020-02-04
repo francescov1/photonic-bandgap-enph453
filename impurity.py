@@ -1,6 +1,5 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import main
 
 
 folder = './Data/200-380mhz'
@@ -14,8 +13,7 @@ def normalize(arr):
     return arr
 
 def plot_imp(p):
-    #p is position, accepts values -1 to 6
-
+    #p is position, accepts values -1 to 5 inclusive
     #load calibration data
     calibration = np.loadtxt(folder+'/calibration.txt')
 
@@ -23,7 +21,7 @@ def plot_imp(p):
     f_calibration = np.loadtxt(folder+'/f-calibration.txt')
 
     #load amplitude data
-    data = np.loadtxt(folder+'/6cell-impure-pos{}.txt'.format(p+1))
+    data = np.loadtxt(folder+'/6cell-impure-pos{}.txt'.format(p+2))
     data_calibrated = data[:,1]/calibration[:,1]
 
     #find fit line for frequency data

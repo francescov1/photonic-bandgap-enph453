@@ -2,10 +2,12 @@ import numpy as np
 from lengths import impurities, cells as cell_lengths
 import matplotlib.pyplot as plt
 from cell_model import CellModel
+import calc_frequency as freq
 
 l_50 = cell_lengths['l_50']
 l_75 = cell_lengths['l_75']
 l_tip = cell_lengths['l_tip']
+l_conn = cell_lengths['l_conn']
 
 # get frequency response
 def get_frequency_response(M_cell):
@@ -40,7 +42,7 @@ class ApparatusModel:
         transmission = []
         reflection = []
         for f_rf in self.frequencies:
-            cell = CellModel(l_75+l_tip, l_50+l_tip, f_rf)
+            cell = CellModel(l_75+l_tip, l_50+l_tip, f_rf, l_conn)
 
             if not hasattr(self, 'bang_gap_frequency'):
                 self.band_gap_frequency = cell.get_band_gap_frequency()
@@ -87,9 +89,15 @@ class ApparatusModel:
         plt.ylabel("Transmission")
 
         if show_band_gaps:
-            current_band_gap = self.band_gap_frequency
-            while current_band_gap <= self.frequencies[-1]:
-                plt.axvline(x=current_band_gap, color="red")
-                current_band_gap += (self.band_gap_frequency*2)
+            # current_band_gap = self.band_gap_frequency
+            current_band_gap, std = freq.get_bandgap_freq()
+            const_band_gap = current_band_gap
+            n = 1
+            while current_band_gap+std <= self.frequencies[-1]:
+                plt.axvline(x=current_band_gap, color="black")
+                plt.axvline(x=current_band_gap-n*std,color='grey',linestyle='dashed')
+                plt.axvline(x=current_band_gap+n*std,color='grey',linestyle='dashed')
+                current_band_gap += (const_band_gap*2)
+                n +=1
 
         plt.show()
