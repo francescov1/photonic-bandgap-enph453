@@ -36,7 +36,7 @@ apparatus = ApparatusModel(n_cells, start_f, stop_f, n_points)
 
 #for fp
 # n_fb_cells = 2 # can be 2 or 4
-# impurity_position = 0
+# impurity_position = 2 # this is irrelevant, its ignored from the function call
 # impurity_type = "fp"
 # fb.plot_fb(n_fb_cells)
 # apparatus.add_impurity(type=impurity_type, cell_position=impurity_position,n_cables=n_fb_cells)
